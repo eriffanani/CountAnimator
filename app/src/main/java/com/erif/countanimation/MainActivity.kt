@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.erif.countanimator.CountAnimator
+import com.erif.countanimator.format.CountFormat
 import com.erif.countanimator.format.CountFormatCurrency
 import com.erif.countanimator.format.CountFormatDecimal
 
@@ -50,20 +51,20 @@ class MainActivity : AppCompatActivity() {
         anim.start()
         */
 
-        val anim = CountAnimator(1000, 3000)
-        anim.format(CountFormatCurrency("IDR", 2))
+        val anim = CountAnimator(100, 50)
+        anim.format(CountFormatCurrency("EUR"))
         anim.doOnUpdate { _, valueStr ->
             txt.text = valueStr
         }
         anim.doOnEnd {
-            txt.setTextColor(ContextCompat.getColor(this, R.color.purple_200))
+            //txt.setTextColor(ContextCompat.getColor(this, R.color.purple_200))
         }
 
         btn.setOnClickListener {
             anim.start()
-            anim.pause()
+            /*anim.pause()
             anim.stop()
-            anim.resume()
+            anim.resume()*/
         }
 
     }

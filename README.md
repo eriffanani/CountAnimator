@@ -1,7 +1,9 @@
-# Number Count Animator
+## Number Counter Animator
 Give effect for shifting the calculation of numbers from the starting value to the final value.
 
 <img width="250px" src="https://user-images.githubusercontent.com/26743731/197971187-0cdee834-ea85-42af-878e-4c8c3df5612f.gif"/> <img width="250px" src="https://user-images.githubusercontent.com/26743731/197971176-b281f0bf-9bf8-4ceb-8e18-ccba2e1d3dbf.gif"/> <img width="250px" src="https://user-images.githubusercontent.com/26743731/197971197-42af6e4d-16d8-47fc-8b7c-1cffb52e9015.gif"/>
+
+[![](https://jitpack.io/v/eriffanani/CountAnimator.svg)](https://jitpack.io/#eriffanani/CountAnimator)
 
 ## Installation
 * **build.gradle** (Old way)

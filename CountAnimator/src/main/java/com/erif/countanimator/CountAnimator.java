@@ -2,13 +2,18 @@ package com.erif.countanimator;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.util.Log;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.PathInterpolator;
 
 import androidx.annotation.NonNull;
+import androidx.vectordrawable.graphics.drawable.PathInterpolatorCompat;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Currency;
+import com.erif.countanimator.format.CountFormat;
+import com.erif.countanimator.interfaces.CountEndListener;
+import com.erif.countanimator.interfaces.CountUpdateListener;
+
 import java.util.regex.Pattern;
 
 public class CountAnimator {
@@ -16,7 +21,7 @@ public class CountAnimator {
     private ValueAnimator anim = null;
     private CountUpdateListener updateListener;
     private CountEndListener endListener;
-    private NumberFormat format = null;
+    private CountFormat format = null;
     private int duration = 2000;
 
     public CountAnimator(int start, int end) {
@@ -38,23 +43,24 @@ public class CountAnimator {
     }
 
     private void parseString(String start, String end) {
-        String mStart = start;
-        String mEnd = end;
-        if (start != null) {
-            mStart = start.replaceAll("\\.", "");
-            mStart = mStart.replaceAll(",", "");
-        }
-        if (end != null) {
-            mEnd = end.replaceAll("\\.", "");
-            mEnd = mEnd.replaceAll(",", "");
-        }
-        if (isNumeric(mStart)) {
-            if (isNumeric(mEnd)) {
+        String mStart = strToNumber(start);
+        String mEnd = strToNumber(end);
+        if (mStart != null && mEnd != null) {
+            try {
                 int newStart = Integer.parseInt(mStart);
                 int newEnd = Integer.parseInt(mEnd);
                 init(newStart, newEnd);
+            } catch (NumberFormatException e) {
+                Log.e("CountAnim", e.getMessage());
             }
         }
+    }
+
+    private String strToNumber(String value) {
+        String allow = "[^0-9]";
+        if (value == null)
+            return null;
+        return value.replaceAll(allow, "");
     }
 
     private void init(int start, int end) {
@@ -62,7 +68,7 @@ public class CountAnimator {
         anim.setDuration(duration);
         anim.addUpdateListener(updateListener());
         anim.addListener(listener());
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.setInterpolator(mInterpolator());
     }
 
     public void duration(int seconds) {
@@ -80,7 +86,7 @@ public class CountAnimator {
         anim.setDuration(millis);
     }
 
-    public void format(NumberFormat format) {
+    public void format(CountFormat format) {
         if (format != null)
             this.format = format;
     }
@@ -89,8 +95,8 @@ public class CountAnimator {
         return valueAnimator -> {
             if (updateListener != null) {
                 int value = (int) valueAnimator.getAnimatedValue();
-                if (format != null) {
-                    String result = format.format(value);
+                if (format != null && format.getFormat() != null) {
+                    String result = format.getFormat().format(value);
                     updateListener.doOnUpdate(value, result);
                 } else {
                     updateListener.doOnUpdate(value, ""+value);
@@ -133,7 +139,7 @@ public class CountAnimator {
     }
 
     public void start() {
-        if (anim != null)
+        if (anim != null && !anim.isRunning())
             anim.start();
     }
 
@@ -159,6 +165,12 @@ public class CountAnimator {
             return false;
         }
         return pattern.matcher(strNum).matches();
+    }
+
+    private Interpolator mInterpolator() {
+        return new PathInterpolator(
+                1f, 0.075f, 0f, 0.975f
+        );
     }
 
 }

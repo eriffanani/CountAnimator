@@ -1,18 +1,22 @@
 package com.erif.countanimation
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.erif.countanimator.CountAnimator
-import com.erif.countanimator.CountFormat
+import com.erif.countanimator.format.CountFormatCurrency
+import com.erif.countanimator.format.CountFormatDecimal
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val txt: TextView = findViewById(R.id.txt)
+        val btn: Button = findViewById(R.id.btn)
 
         /*
         val anim = CountAnimator(0, 1200, 3)
@@ -46,14 +50,21 @@ class MainActivity : AppCompatActivity() {
         anim.start()
         */
 
-        val anim = CountAnimator(12000, 800)
+        val anim = CountAnimator(1000, 3000)
+        anim.format(CountFormatCurrency("IDR", 2))
         anim.doOnUpdate { _, valueStr ->
             txt.text = valueStr
         }
         anim.doOnEnd {
             txt.setTextColor(ContextCompat.getColor(this, R.color.purple_200))
         }
-        anim.start()
+
+        btn.setOnClickListener {
+            anim.start()
+            anim.pause()
+            anim.stop()
+            anim.resume()
+        }
 
     }
 

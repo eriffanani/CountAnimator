@@ -3,12 +3,10 @@ package com.erif.countanimator;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.util.Log;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.PathInterpolator;
 
 import androidx.annotation.NonNull;
-import androidx.vectordrawable.graphics.drawable.PathInterpolatorCompat;
 
 import com.erif.countanimator.format.CountFormat;
 import com.erif.countanimator.interfaces.CountEndListener;
